@@ -36,6 +36,7 @@ if (upcomingButton && nowPlayingButton) {
 }
 
 async function displayPopularMovies() {
+	console.log('abc');
 	const { results } = await fetchAPIData('movie/popular');
 
 	results.forEach((movie) => {
