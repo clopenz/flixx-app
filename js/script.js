@@ -36,7 +36,6 @@ if (upcomingButton && nowPlayingButton) {
 }
 
 async function displayPopularMovies() {
-	console.log('abc');
 	const { results } = await fetchAPIData('movie/popular');
 
 	results.forEach((movie) => {
@@ -73,7 +72,6 @@ async function displayPopularMovies() {
 
 // Display 20 most popular tv shows
 async function displayPopularShows() {
-	console.log('123');
 	const { results } = await fetchAPIData('tv/popular');
 
 	results.forEach((show) => {
@@ -110,7 +108,6 @@ async function displayPopularShows() {
 
 // Display Movie Details
 async function displayMovieDetails() {
-	console.log('xyz');
 	let currentDate = new Date().toJSON().slice(0, 10);
 
 	const movieId = window.location.search.split('=')[1];
@@ -187,7 +184,6 @@ async function displayMovieDetails() {
 
 // Display Show Details
 async function displayShowDetails() {
-	console.log('asdf');
 	const showId = window.location.search.split('=')[1];
 
 	const show = await fetchAPIData(`tv/${showId}`);
@@ -544,20 +540,20 @@ function addCommasToNumber(number) {
 function init() {
 	switch (global.currentPage) {
 		case '/':
-		case '/index.html' || 'index':
+		case '/index.html':
 			displaySlider();
 			displayPopularMovies();
 			break;
-		case 'shows':
+		case '/shows.html':
 			displayPopularShows();
 			break;
-		case '/movie-details.html' || 'movie-details':
+		case '/movie-details.html':
 			displayMovieDetails();
 			break;
-		case '/tv-details.html' || 'tv-details':
+		case '/tv-details.html':
 			displayShowDetails();
 			break;
-		case '/search.html' || 'search':
+		case '/search.html':
 			search();
 			break;
 	}
