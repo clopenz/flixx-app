@@ -73,7 +73,6 @@ async function displayPopularMovies() {
 // Display 20 most popular tv shows
 async function displayPopularShows() {
 	const { results } = await fetchAPIData('tv/popular');
-	console.log(results);
 
 	results.forEach((show) => {
 		const div = document.createElement('div');
@@ -539,23 +538,22 @@ function addCommasToNumber(number) {
 
 // Init App
 function init() {
-	console.log('Current Page:', global.currentPage);
 	switch (global.currentPage) {
 		case '/':
-		case '/index.html':
+		case '/index.html' || 'index':
 			displaySlider();
 			displayPopularMovies();
 			break;
-		case '/shows.html':
+		case '/shows.html' || 'shows':
 			displayPopularShows();
 			break;
-		case '/movie-details.html':
+		case '/movie-details.html' || 'movie-details':
 			displayMovieDetails();
 			break;
-		case '/tv-details.html':
+		case '/tv-details.html' || 'tv-details':
 			displayShowDetails();
 			break;
-		case '/search.html':
+		case '/search.html' || 'search':
 			search();
 			break;
 	}
