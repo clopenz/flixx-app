@@ -73,6 +73,7 @@ async function displayPopularMovies() {
 // Display 20 most popular tv shows
 async function displayPopularShows() {
 	const { results } = await fetchAPIData('tv/popular');
+	console.log(results);
 
 	results.forEach((show) => {
 		const div = document.createElement('div');
@@ -475,7 +476,7 @@ async function fetchAPIData(endpoint) {
 	showSpinner();
 
 	const response = await fetch(
-		`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US&region=US`
+		`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`
 	);
 
 	const data = await response.json();
