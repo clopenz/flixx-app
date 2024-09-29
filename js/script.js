@@ -110,6 +110,7 @@ async function displayPopularShows() {
 
 // Display Movie Details
 async function displayMovieDetails() {
+	console.log('xyz');
 	let currentDate = new Date().toJSON().slice(0, 10);
 
 	const movieId = window.location.search.split('=')[1];
@@ -186,6 +187,7 @@ async function displayMovieDetails() {
 
 // Display Show Details
 async function displayShowDetails() {
+	console.log('asdf');
 	const showId = window.location.search.split('=')[1];
 
 	const show = await fetchAPIData(`tv/${showId}`);
