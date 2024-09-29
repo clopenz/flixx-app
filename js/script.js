@@ -539,6 +539,7 @@ function addCommasToNumber(number) {
 
 // Init App
 function init() {
+	console.log('Current Page:', global.currentPage);
 	switch (global.currentPage) {
 		case '/':
 		case '/index.html':
