@@ -72,6 +72,7 @@ async function displayPopularMovies() {
 
 // Display 20 most popular tv shows
 async function displayPopularShows() {
+	console.log('123');
 	const { results } = await fetchAPIData('tv/popular');
 
 	results.forEach((show) => {
@@ -538,7 +539,6 @@ function addCommasToNumber(number) {
 
 // Init App
 function init() {
-	console.log(global.currentPage);
 	switch (global.currentPage) {
 		case '/':
 		case '/index.html' || 'index':
