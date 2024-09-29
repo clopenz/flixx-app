@@ -13,6 +13,28 @@ const global = {
 	},
 };
 
+// Switch between Now Playing and Upcoming
+const upcomingButton = document.querySelector(
+	'.now-playing-upcoming h2.upcoming'
+);
+const nowPlayingButton = document.querySelector(
+	'.now-playing-upcoming h2.now-playing'
+);
+
+if (upcomingButton && nowPlayingButton) {
+	upcomingButton.addEventListener('click', () => {
+		upcomingButton.classList.add('active');
+		nowPlayingButton.classList.remove('active');
+		displaySlider();
+	});
+
+	nowPlayingButton.addEventListener('click', () => {
+		nowPlayingButton.classList.add('active');
+		upcomingButton.classList.remove('active');
+		displaySlider();
+	});
+}
+
 async function displayPopularMovies() {
 	const { results } = await fetchAPIData('movie/popular');
 
@@ -86,6 +108,8 @@ async function displayPopularShows() {
 
 // Display Movie Details
 async function displayMovieDetails() {
+	let currentDate = new Date().toJSON().slice(0, 10);
+
 	const movieId = window.location.search.split('=')[1];
 
 	const movie = await fetchAPIData(`movie/${movieId}`);
@@ -95,26 +119,30 @@ async function displayMovieDetails() {
 
 	const div = document.createElement('div');
 
-	div.innerHTML = `        <div class="details-top">
-   <div>
-   ${
+	div.innerHTML = `<div class="details-top"><div> 
+		${
 			movie.poster_path
 				? `<img
-src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
-class="card-img-top"
-alt="${movie.title}" 
-/>`
+			src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
+			class="card-img-top"
+			alt="${movie.title}" 
+			/>`
 				: `<img
-src="images/no-image.jpg"
-class="card-img-top"
-alt="${movie.title}" />`
+			src="images/no-image.jpg"
+			class="card-img-top"
+			alt="${movie.title}" />`
 		}
-   </div>
+							</div>
    <div>
      <h2>${movie.title}</h2>
-     <p>
-       <i class="fas fa-star text-primary"></i>
-      ${movie.vote_average.toFixed(1)} / 10
+     <p class="rating">
+      ${
+				movie.release_date < currentDate
+					? '<i class="fas fa-star text-primary"></i>' +
+					  movie.vote_average.toFixed(1) +
+					  '/10'
+					: ''
+			}
      </p>
      <p class="text-muted">Release Date: ${movie.release_date}</p>
      <p>
@@ -132,12 +160,12 @@ alt="${movie.title}" />`
  <div class="details-bottom">
    <h2>Movie Info</h2>
    <ul>
-     <li><span class="text-secondary">Budget:</span> $${addCommasToNumber(
-				movie.budget
-			)}</li>
-     <li><span class="text-secondary">Revenue:</span> $${addCommasToNumber(
-				movie.revenue
-			)}</li>
+     <li><span class="text-secondary">Budget:</span> ${
+				movie.budget > 0 ? '$' + addCommasToNumber(movie.budget) : 'Unknown'
+			}</li>
+     <li><span class="text-secondary">Revenue:</span> ${
+				movie.revenue > 0 ? '$' + addCommasToNumber(movie.revenue) : 'Unknown'
+			}</li>
      <li><span class="text-secondary">Runtime:</span> ${
 				movie.runtime
 			} minutes</li>
@@ -365,39 +393,13 @@ function displayPagination() {
 
 // Display Slider Movies
 async function displaySlider() {
-	// Switch between Now Playing and Upcoming
-	document
-		.querySelector('.now-playing-upcoming h2.upcoming')
-		.addEventListener('click', () => {
-			document
-				.querySelector('.now-playing-upcoming h2.upcoming')
-				.classList.add('active');
-			document
-				.querySelector('.now-playing-upcoming h2.now-playing')
-				.classList.remove('active');
-			displaySlider();
-		});
-
-	document
-		.querySelector('.now-playing-upcoming h2.now-playing')
-		.addEventListener('click', () => {
-			document
-				.querySelector('.now-playing-upcoming h2.upcoming')
-				.classList.remove('active');
-			document
-				.querySelector('.now-playing-upcoming h2.now-playing')
-				.classList.add('active');
-			displaySlider();
-		});
-
-	document.querySelector('.swiper-wrapper').innerHTML = '';
-
 	// If Now Playing is active, display Now Playing Movies
 	if (
 		document
 			.querySelector('.header-wrapper .now-playing')
 			.classList.contains('active')
 	) {
+		document.querySelector('.swiper-wrapper').innerHTML = '';
 		const { results } = await fetchAPIData('movie/now_playing');
 
 		results.forEach((movie) => {
@@ -417,8 +419,9 @@ async function displaySlider() {
 		});
 
 		initSwiper();
-		// Else, display Upcoming Movies
 	} else {
+		// Else, display Upcoming Movies
+		document.querySelector('.swiper-wrapper').innerHTML = '';
 		const { results } = await fetchAPIData('movie/upcoming');
 
 		results.forEach((movie) => {
@@ -426,11 +429,9 @@ async function displaySlider() {
 			div.classList.add('swiper-slide');
 
 			div.innerHTML = `<a href="movie-details.html?id=${movie.id}">
-				<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${
-				movie.title
-			}"/>
+				<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}"/>
 				<h4 class="swiper-rating">
-					<i class="fas fa-star text-secondary"></i> ${movie.vote_average.toFixed(1)} / 10
+					${movie.release_date}
 				</h4>
 			</a>`;
 
@@ -474,7 +475,7 @@ async function fetchAPIData(endpoint) {
 	showSpinner();
 
 	const response = await fetch(
-		`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`
+		`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US&region=US`
 	);
 
 	const data = await response.json();
