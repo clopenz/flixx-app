@@ -538,13 +538,14 @@ function addCommasToNumber(number) {
 
 // Init App
 function init() {
+	console.log(global.currentPage);
 	switch (global.currentPage) {
 		case '/':
 		case '/index.html' || 'index':
 			displaySlider();
 			displayPopularMovies();
 			break;
-		case '/shows.html' || 'shows':
+		case 'shows':
 			displayPopularShows();
 			break;
 		case '/movie-details.html' || 'movie-details':
