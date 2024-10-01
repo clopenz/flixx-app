@@ -33,10 +33,40 @@
 						<li>
 							<a class="nav-link" href="/shows.html">TV Shows</a>
 						</li>
+						<li>
+							<a class="nav-link" href="/actors.html">Actors</a>
+						</li>
 					</ul>
 				</nav>
 			</div>
 		</header>
+
+		<section class="search">
+			<div class="container">
+				<div id="alert"></div>
+				<form action="/search.html" class="search-form">
+					<!-- movies and shows radio box -->
+					<div class="search-radio">
+						<input type="radio" id="movie" name="type" value="movie" />
+						<label for="movies">Movies</label>
+						<input type="radio" id="tv" name="type" value="tv" checked />
+						<label for="shows">TV Shows</label>
+						<input type="radio" id="actor" name="type" value="person" />
+						<label for="actors">Actors</label>
+					</div>
+					<div class="search-flex">
+						<input
+							type="text"
+							name="search-term"
+							id="search-term"
+							placeholder="Enter search term" />
+						<button class="btn" type="submit">
+							<i class="fas fa-search"></i>
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
 
 		<!-- Popular TV Shows -->
 		<section class="container">

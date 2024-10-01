@@ -127,18 +127,25 @@ ul {
 /* Card */
 .card {
 	background: #04376b;
-	padding: 5px;
 	border-radius: 5px;
+	max-width: 300px;
 }
 
 .card img {
 	width: 100%;
-	border-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 }
 
 .card-body {
 	padding: 10px;
-	font-size: 20px;
+	font-size: 18px;
+}
+
+.card-text {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .card:hover {
@@ -257,23 +264,23 @@ section.now-playing-upcoming {
 	padding: 10px;
 }
 
-/* Movie Details */
+/* Movie & Show Details */
 .details-top {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
 	margin: 50px 0 30px;
-}
 
-.details-top img {
-	width: 400px;
-	height: 100%;
-	margin-right: 60px;
-	object-fit: cover;
-}
+	img {
+		width: 400px;
+		height: 100%;
+		margin-right: 60px;
+		object-fit: cover;
+		border-radius: 5px;
+	}
 
-.details-top p {
-	margin: 20px 0;
+	p {
+		margin: 20px 0;
+	}
 }
 
 .details-top .rating {
@@ -295,8 +302,45 @@ section.now-playing-upcoming {
 	border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* TV Shows Section */
-.shows-header {
+/* Actor Details */
+.actor-details-top {
+	display: flex;
+	margin: 50px 0 30px;
+
+	img {
+		height: 500px;
+
+		margin-right: 60px;
+		object-fit: cover;
+		border-radius: 5px;
+	}
+
+	p {
+		margin: 20px 0;
+	}
+}
+
+.bio-heading {
+	margin-bottom: -20px;
+}
+
+.credit-heading {
+	margin-top: 30px;
+}
+
+@media (max-width: 700px) {
+	.details-top,
+	.actor-details-top {
+		display: block;
+		margin-bottom: 40px;
+		padding-bottom: 20px;
+		border-bottom: #ccc solid 1px;
+	}
+}
+
+/* TV Shows & Actors Header */
+.shows-header,
+.actors-header {
 	margin-top: 20px;
 }
 

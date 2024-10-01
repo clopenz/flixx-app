@@ -106,6 +106,46 @@ async function displayPopularShows() {
 	});
 }
 
+// Display popular actors
+async function displayPopularActors() {
+	const { results } = await fetchAPIData('person/popular');
+
+	results.forEach((person) => {
+		if (person.known_for_department !== 'Acting') return;
+		const movie_title = person.known_for.map(
+			(movie) => movie.title || movie.name
+		);
+
+		const div = document.createElement('div');
+		div.classList.add('card');
+		div.innerHTML = `
+
+            <a href="actor-details.html?id=${person.id}">
+               ${
+									person.profile_path
+										? `<img
+                  src="https://image.tmdb.org/t/p/w500${person.profile_path}"
+                  class="card-img-top"
+                  alt="${person.name}" 
+               />`
+										: `<img
+               src="images/no-image.jpg"
+               class="card-img-top"
+               alt="${person.name}" />`
+								}
+            
+            <div class="card-body">
+               <h5 class="card-title">${person.name}</h5>
+               <p class="card-text">
+                  <small class="text-muted">${movie_title.join(' | ')}</small>
+               </p>
+            </div>
+				</a>`;
+
+		document.querySelector('#popular-actors').appendChild(div);
+	});
+}
+
 // Display Movie Details
 async function displayMovieDetails() {
 	let currentDate = new Date().toJSON().slice(0, 10);
@@ -249,6 +289,84 @@ alt="${show.name}" />`
 	document.querySelector('#show-details').appendChild(div);
 }
 
+// Display Actor Details
+async function displayActorDetails() {
+	const actorId = window.location.search.split('=')[1];
+
+	const actor = await fetchAPIData(`person/${actorId}`);
+	const actor_credits = await fetchAPIData(
+		`person/${actorId}/combined_credits`
+	);
+
+	const title = actor_credits.cast
+		.map((cast) => {
+			return cast.title || cast.name;
+		})
+		.slice(0, 20);
+
+	const birthday = new Date(actor.birthday);
+	const deathday = new Date(actor.deathday);
+	const dateFormat = { year: 'numeric', month: 'long', day: 'numeric' };
+	formattedBirthday = birthday.toLocaleDateString('en-US', dateFormat);
+	formattedDeathday = deathday.toLocaleDateString('en-US', dateFormat);
+
+	const div = document.createElement('div');
+
+	div.innerHTML = `<div class="actor-details-top">
+	<div> 
+		${
+			actor.profile_path
+				? `<img
+			src="https://image.tmdb.org/t/p/w500${actor.profile_path}"
+			class="card-img-top"
+			alt="${actor.name}" 
+			/>`
+				: ''
+		}
+	</div>
+   <div class="actor-details-info">
+     <h2>${actor.name}</h2>
+	  <h4>${formattedBirthday}</h4>
+	  <h4>${actor.deathday ? '- ' + formattedDeathday : ''}</h4>
+     <p class="rating">
+      ${
+				actor.popularity
+					? '<i class="fas fa-star text-primary"></i>' +
+					  actor.popularity.toFixed(0)
+					: ''
+			}
+     </p>
+	  ${
+			actor.biography
+				? `<h3 class="bio-heading">Biography</h3>
+		<p>
+			${actor.biography}
+		</p>`
+				: ''
+		}
+
+
+		${
+			actor.homepage
+				? `<a href="${actor.homepage}" target="_blank" class="btn">Visit Actor Homepage</a>`
+				: ''
+		}
+
+
+	  <div class="known-for">
+	  <h3 class="credit-heading">Cast Credits</h3>
+	  	<div id="actor-known-for-grid" class="grid">
+			${title.join(' | ')}
+	  	</div>
+	  </div>
+   </div>
+ </div>
+
+   `;
+
+	document.querySelector('#actor-details').appendChild(div);
+}
+
 // Display Backdrop on Details Pages
 function displayBackgroundImage(type, backgroundPath) {
 	const overlayDiv = document.createElement('div');
@@ -271,7 +389,7 @@ function displayBackgroundImage(type, backgroundPath) {
 	}
 }
 
-// Search Movies/Shows
+// Search Movies/Shows/Actors
 async function search() {
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
@@ -307,9 +425,13 @@ function displaySearchResults(results) {
 	document.querySelector('#pagination').innerHTML = '';
 
 	results.forEach((result) => {
+		// For actors
+
 		const div = document.createElement('div');
 		div.classList.add('card');
-		div.innerHTML = `
+
+		if (global.search.type === 'movie' || global.search.type === 'tv') {
+			div.innerHTML = `
             <a href="${global.search.type}-details.html?id=${result.id}">
                ${
 									result.poster_path
@@ -341,6 +463,37 @@ function displaySearchResults(results) {
                </p>
             </div>
 				</a>`;
+		} else if (global.search.type === 'person') {
+			// Handle actors
+			if (result.known_for_department !== 'Acting') return;
+
+			const movie_title = result.known_for.map(
+				(movie) => movie.title || movie.name
+			);
+
+			div.innerHTML = `
+            <a href="actor-details.html?id=${result.id}">
+               ${
+									result.profile_path
+										? `<img
+                  src="https://image.tmdb.org/t/p/w500/${result.profile_path}"
+                  class="card-img-top"
+                  alt="${result.name}" 
+               />`
+										: `<img
+               src="images/no-image.jpg"
+               class="card-img-top"
+               alt="${result.name}"  />`
+								}
+            
+            <div class="card-body">
+               <h5 class="card-title">${result.name}</h5>
+               <p class="card-text">
+                  <small class="text-muted"> ${movie_title.join(' | ')}</small>
+               </p>
+            </div>
+				</a>`;
+		}
 
 		document.querySelector('#search-results-heading').innerHTML = `
 				<h2>${results.length} of ${global.search.totalResults} Results for ${global.search.term}</h2>
@@ -548,6 +701,10 @@ function init() {
 		case '/shows':
 			displayPopularShows();
 			break;
+		case '/actors.html':
+		case '/actors':
+			displayPopularActors();
+			break;
 		case '/movie-details.html':
 		case '/movie-details':
 			displayMovieDetails();
@@ -555,6 +712,10 @@ function init() {
 		case '/tv-details.html':
 		case '/tv-details':
 			displayShowDetails();
+			break;
+		case '/actor-details.html':
+		case '/actor':
+			displayActorDetails();
 			break;
 		case '/search.html':
 		case '/search':
