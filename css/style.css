@@ -54,6 +54,10 @@ ul {
 	padding: 0 20px;
 }
 
+.header-popular {
+	margin-bottom: 20px;
+}
+
 /* Buttons */
 .btn {
 	display: inline-block;
@@ -91,7 +95,10 @@ ul {
 
 .main-header {
 	padding: 20px 0;
-	background: rgba(0, 0, 0, 0.8);
+
+	background: linear-gradient(to right, #000, #03031fe1);
+
+	border-bottom: 1px solid #000;
 }
 
 .main-header .logo {
@@ -165,6 +172,10 @@ ul {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+
+	small {
+		font-size: 10px;
+	}
 }
 
 .main-footer .container .logo {
@@ -328,16 +339,6 @@ section.now-playing-upcoming {
 	margin-top: 30px;
 }
 
-@media (max-width: 700px) {
-	.details-top,
-	.actor-details-top {
-		display: block;
-		margin-bottom: 40px;
-		padding-bottom: 20px;
-		border-bottom: #ccc solid 1px;
-	}
-}
-
 /* TV Shows & Actors Header */
 .shows-header,
 .actors-header {
@@ -364,6 +365,12 @@ section.now-playing-upcoming {
 .search .container form {
 	width: 100%;
 	max-width: 600px;
+}
+
+#search-results-heading {
+	h2 {
+		margin-bottom: 20px;
+	}
 }
 
 .search-radio label {
@@ -435,4 +442,47 @@ section.now-playing-upcoming {
 
 .error {
 	background: red;
+}
+
+/* Media Queries */
+@media (max-width: 700px) {
+	.details-top,
+	.actor-details-top {
+		display: block;
+		margin-bottom: 40px;
+		padding-bottom: 20px;
+		border-bottom: #ccc solid 1px;
+	}
+
+	.header-wrapper {
+		h2 {
+			font-size: 15px;
+			padding: 5px 45px;
+			white-space: nowrap;
+		}
+	}
+
+	.main-footer .container .logo {
+		display: none;
+	}
+}
+
+@media (max-width: 574px) {
+	.header-popular {
+		text-align: center;
+	}
+
+	.card {
+		max-width: 400px;
+	}
+
+	#search-results-heading {
+		h2 {
+			text-align: center;
+		}
+	}
+
+	.card {
+		justify-self: center;
+	}
 }
