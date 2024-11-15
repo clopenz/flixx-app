@@ -88,6 +88,7 @@ ul {
 /* Header */
 .main-header .container {
 	display: flex;
+
 	justify-content: space-between;
 	align-items: center;
 	padding: 0 20px;
@@ -105,6 +106,7 @@ ul {
 	color: #fff;
 	font-size: 25px;
 	font-weight: 700;
+
 	text-transform: uppercase;
 }
 
@@ -442,47 +444,4 @@ section.now-playing-upcoming {
 
 .error {
 	background: red;
-}
-
-/* Media Queries */
-@media (max-width: 700px) {
-	.details-top,
-	.actor-details-top {
-		display: block;
-		margin-bottom: 40px;
-		padding-bottom: 20px;
-		border-bottom: #ccc solid 1px;
-	}
-
-	.header-wrapper {
-		h2 {
-			font-size: 15px;
-			padding: 5px 45px;
-			white-space: nowrap;
-		}
-	}
-
-	.main-footer .container .logo {
-		display: none;
-	}
-}
-
-@media (max-width: 574px) {
-	.header-popular {
-		text-align: center;
-	}
-
-	.card {
-		max-width: 400px;
-	}
-
-	#search-results-heading {
-		h2 {
-			text-align: center;
-		}
-	}
-
-	.card {
-		justify-self: center;
-	}
 }
